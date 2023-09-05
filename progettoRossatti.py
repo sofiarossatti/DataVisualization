@@ -103,7 +103,6 @@ paygap = paygap.drop(["Max_Value"], axis = 1)
 
 paygap.head()
 
-#st.subheader("WordCloud: the biggest gaps in fields")
 Industry = paygap["Industry"].mean()
 Business= paygap["Business"].mean()
 Mining= paygap["Mining"].mean()
@@ -176,14 +175,13 @@ def update_choropleth(selected_year):
                     locations="Country", 
                     locationmode='country names',
                     color="Max_Variable",
-                    hover_data=["Max_Variable", "Max_Value"],  # Add variables to hover data
+                    hover_data=["Max_Variable", "Max_Value"], 
                     color_continuous_scale=px.colors.qualitative.Plotly
                     )
     
     return fig
 
 # Layout for Wordcloud Map
-
 working_sectors = {"Industry": Industry, "Business": Business, "Mining": Mining, "Manufacturing": Manufacturing, "Electricity supply": Electricity_supply, "Water supply": Water_supply, "Construction": Construction, "Retail trade": Retail_trade, "Transportation": Transportation, "Accommodation": Accommodation, "Information": Information, "Financial": Financial, "Real estate": Real_Estate ,  "Prefessional scientific": Professional_scientific, "Administrative": Administrative, "Public administration": Public_administration,  "Education": Education,  "Human health": Human_health,  "Arts": Arts, "Other": Other }
 wordcloud = WordCloud(width=400, height=200, background_color='white').generate_from_frequencies(working_sectors)
 # Convert the WordCloud image to a base64-encoded image
@@ -196,8 +194,6 @@ layout_wordcloud = html.Div([
     html.H1("WordCloud 💭"),
     html.Img(src='data:image/png;base64,{}'.format(img_base64), style={'width': '60%', 'height': 'auto', 'display': "block", 'margin-left': 'auto', 'margin-right': 'auto'})
 ])
-
-#END WORDCLOUD
 
 layout_page1 = html.Div([
     html.H1("Grouped Bar Chart 📊"),
@@ -217,7 +213,6 @@ layout_page1 = html.Div([
     )
 ])
 
-# Callback for updating grouped bar chart
 @app.callback(
     Output('grouped-bar-chart-page1', 'figure'),
     Input('country-dropdown-page1', 'value'),
@@ -253,7 +248,6 @@ layout_page2 = html.Div([
     dcc.Graph(id='interactive-map-page2', style={'width': '100%', 'height': '600px'})
 ])
 
-# Callback for updating interactive map
 @app.callback(
     Output('interactive-map-page2', 'figure'),
     Input('year-dropdown-page2', 'value'),
@@ -282,7 +276,6 @@ def update_interactive_map(selected_year, selected_variable):
     
     return fig
 
-# Layout for Page 3: Line Plot
 layout_page3 = html.Div([
     html.H1("Line Plot 📉"),
     dcc.Dropdown(
@@ -298,7 +291,6 @@ layout_page3 = html.Div([
     dcc.Graph(id='line-plot-page3')
 ])
 
-# Callback for updating line plot
 @app.callback(
     Output('line-plot-page3', 'figure'),
     Input('variable-dropdown-page3', 'value'),
@@ -316,7 +308,6 @@ def update_line_plot(selected_variable, selected_country):
     
     return fig
 
-# Layout for Page 4: 3D Scatter Plot
 layout_page4 = html.Div([
     html.H1("3D Scatter Plot 📌"),
     dcc.Dropdown(
@@ -337,7 +328,6 @@ layout_page4 = html.Div([
     dcc.Graph(id='interactive-3d-scatter-page4')
 ])
 
-# Callback for updating 3D scatter plot
 @app.callback(
     Output('interactive-3d-scatter-page4', 'figure'),
     Input('year-dropdown-page4', 'value'),
@@ -360,7 +350,6 @@ def update_3d_scatter(selected_year, selected_x_variable, selected_y_variable):
     
     return fig
 
-# Layout for Page 5: Heatmap
 layout_page5 = html.Div([
     html.H1("Heatmap 🟨🟩🟪"),
     dcc.Dropdown(
@@ -371,7 +360,6 @@ layout_page5 = html.Div([
     dcc.Graph(id='cluster-heatmap-page5')
 ])
 
-# Callback for updating cluster heatmap
 @app.callback(
     Output('cluster-heatmap-page5', 'figure'),
     Input('year-dropdown-page5', 'value')
@@ -390,7 +378,6 @@ def update_cluster_heatmap(selected_year):
 
     return fig
 
-# Layout for Page 6: Clusterization
 layout_page6 = html.Div([
     html.H1("Clusterization 🗺"),
     dcc.Dropdown(
@@ -401,7 +388,6 @@ layout_page6 = html.Div([
     dcc.Graph(id='cluster-map-page6')
 ])
 
-# Callback for updating cluster map
 @app.callback(
     Output('cluster-map-page6', 'figure'),
     Input('year-dropdown-page6', 'value')
@@ -417,8 +403,7 @@ def update_cluster_map(selected_year):
     kmeans = KMeans(n_clusters=num_clusters)
     clusters = kmeans.fit_predict(scaled_data)
     filtered_data['Cluster'] = clusters
-    
-    # Create a choropleth cluster map
+
     fig = px.choropleth(
         filtered_data,
         locations='Country',
